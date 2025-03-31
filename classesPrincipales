@@ -1,0 +1,41 @@
+Classes principales
+
+Utilisateur (abstraite)
++id : int
++nom : String
++email : String
++motDePasse : String
++connecter() : void
++deconnecter() : void
+
+Patient (hérite de Utilisateur)
++listeRendezVous : List
++prendreRendezVous(RendezVous) : void
++annulerRendezVous(RendezVous) : void
+
+Spécialiste (hérite de Utilisateur)
++specialite : String
++planning : Planning
++accepterRendezVous(RendezVous) : void
++refuserRendezVous(RendezVous) : void
+
+Administrateur (hérite de Utilisateur)
++gérerUtilisateurs(Utilisateur) : void
++gérerRendezVous(RendezVous) : void
+
+RendezVous
++id : int
++date : LocalDate
++heure : LocalTime
++patient : Patient
++specialiste : Spécialiste
++statut : String (Confirmé, Annulé, En attente)
++confirmer() : void
++annuler() : void
+
+Planning
++id : int
++specialiste : Spécialiste
++disponibilites : Map<LocalDate, List>
++ajouterDisponibilite(LocalDate, LocalTime) : void
++supprimerDisponibilite(LocalDate, LocalTime) : void
