@@ -1,72 +1,84 @@
 package Controleur;
 
-import Model.Lieu;
-import Model.Specialiste;
-import dao.LieuDAO;
-import dao.RendezVousDAO;
-import Model.Patient;
-import Model.RendezVous;
+import dao.*;
+import Model.*;
 import Vue.PatientDashboardView;
-import dao.SpecialisteDAO;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDashboardController {
     private PatientDashboardView view;
     private RendezVousDAO rendezVousDAO;
+    private SpecialisteDAO specialisteDAO;
+    private LieuDAO lieuDAO;
     private Patient patient;
 
     public PatientDashboardController(Patient patient) {
         this.patient = patient;
         this.view = new PatientDashboardView(patient.getPrenom());
-        this.rendezVousDAO = new RendezVousDAO();
 
-        loadRendezVous();
-        addActions();
+        this.rendezVousDAO = new RendezVousDAO();
+        this.specialisteDAO = new SpecialisteDAO();
+        this.lieuDAO = new LieuDAO();
+
+        refresh();
+
+        view.addLogoutListener(e -> view.dispose());
+
+        view.addPrendreRdvListener(e -> {
+            new PriseRendezVousController(patient, this);
+        });
+
+        view.addAnnulerRdvListener(e -> {
+            String selection = view.getRdvSelectionne();
+            if (selection == null) return;
+
+            int id = Integer.parseInt(selection.substring(selection.indexOf("[") + 1, selection.indexOf("]")));
+
+            int confirm = JOptionPane.showConfirmDialog(view, "Confirmer l'annulation ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (rendezVousDAO.delete(id)) {
+                    JOptionPane.showMessageDialog(view, "✅ Rendez-vous annulé.");
+                    refresh();
+                } else {
+                    JOptionPane.showMessageDialog(view, "❌ Échec de l'annulation.");
+                }
+            }
+        });
 
         view.setVisible(true);
     }
 
-    private void loadRendezVous() {
+    public void refresh() {
         List<RendezVous> rdvs = rendezVousDAO.findByPatientId(patient.getId());
         StringBuilder builder = new StringBuilder();
-
-        SpecialisteDAO specialisteDAO = new SpecialisteDAO();
-        LieuDAO lieuDAO = new LieuDAO();
+        List<String> rdvComboListe = new ArrayList<>();
 
         if (rdvs.isEmpty()) {
             builder.append("Aucun rendez-vous trouvé.");
         } else {
             for (RendezVous rdv : rdvs) {
                 String date = rdv.getDateHeure().toString();
-                String specialisteNom = "Inconnu";
-                String lieuNom = "Inconnu";
 
                 Specialiste s = specialisteDAO.findById(rdv.getIdSpecialiste());
-                if (s != null) {
-                    specialisteNom = s.getPrenom() + " " + s.getNom();
-                }
+                String specialisteNom = (s != null) ? s.getPrenom() + " " + s.getNom() : "Inconnu";
 
                 Lieu l = lieuDAO.findById(rdv.getIdLieu());
-                if (l != null) {
-                    lieuNom = l.getNomEtablissement() + " - " + l.getVille();
-                }
+                String lieuNom = (l != null) ? l.getNomEtablissement() + " - " + l.getVille() : "Inconnu";
 
                 builder.append("📅 ").append(date)
                         .append(" – 👨‍⚕️ ").append(specialisteNom)
                         .append(" – 🏥 ").append(lieuNom)
                         .append("\n");
+
+                String label = "[" + rdv.getId() + "] " + date;
+                rdvComboListe.add(label);
             }
         }
 
         view.afficherRendezVous(builder.toString());
-    }
-
-
-    private void addActions() {
-        view.addLogoutListener(e -> {
-            view.dispose(); // ferme le dashboard
-            // Tu peux relancer la ConnexionView ici si tu veux
-        });
+        view.setRdvListe(rdvComboListe.toArray(new String[0]));
     }
 }

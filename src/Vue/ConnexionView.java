@@ -13,24 +13,47 @@ public class ConnexionView extends JFrame {
 
     public ConnexionView() {
         setTitle("Connexion Patient");
-        setSize(350, 300);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(6, 1));
 
-        emailField = new JTextField();
-        passwordField = new JPasswordField();
+        // Main panel avec marges
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        JLabel titleLabel = new JLabel("Connexion Patient");
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+
+        emailField = new JTextField(20);
+        passwordField = new JPasswordField(20);
         loginButton = new JButton("Se connecter");
         inscriptionButton = new JButton("Créer un compte");
         statusLabel = new JLabel("", SwingConstants.CENTER);
+        statusLabel.setForeground(Color.RED);
+        statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        add(new JLabel("Email :"));
-        add(emailField);
-        add(new JLabel("Mot de passe :"));
-        add(passwordField);
-        add(loginButton);
-        add(inscriptionButton);
-        add(statusLabel);
+        mainPanel.add(titleLabel);
+        mainPanel.add(labelWithField("Email :", emailField));
+        mainPanel.add(labelWithField("Mot de passe :", passwordField));
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(loginButton);
+        mainPanel.add(inscriptionButton);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(statusLabel);
+
+        add(mainPanel);
+    }
+
+    private JPanel labelWithField(String labelText, JComponent field) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JLabel label = new JLabel(labelText);
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(field, BorderLayout.CENTER);
+        return panel;
     }
 
     public String getEmail() {

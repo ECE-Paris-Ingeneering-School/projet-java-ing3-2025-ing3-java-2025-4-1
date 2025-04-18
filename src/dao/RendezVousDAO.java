@@ -55,6 +55,27 @@ public class RendezVousDAO {
 
         return null;
     }
+    public boolean isCreneauDisponible(int idSpecialiste, int idLieu, LocalDateTime dateHeure) {
+        String sql = "SELECT COUNT(*) FROM RendezVous WHERE date_heure = ? AND (id_specialiste = ? OR id_lieu = ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, Timestamp.valueOf(dateHeure));
+            stmt.setInt(2, idSpecialiste);
+            stmt.setInt(3, idLieu);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0; // 0 = pas de conflit → créneau dispo
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     public List<RendezVous> findAll() {
         List<RendezVous> liste = new ArrayList<>();

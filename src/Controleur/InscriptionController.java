@@ -1,5 +1,6 @@
 package Controleur;
 
+import Vue.ConnexionView;
 import dao.PatientDAO;
 import Model.Patient;
 import Vue.InscriptionView;
@@ -16,6 +17,13 @@ public class InscriptionController {
         this.patientDAO = patientDAO;
 
         this.view.addInscriptionListener(new InscriptionListener());
+
+        view.addRetourConnexionListener(e -> {
+            view.dispose(); // ferme la vue inscription
+            ConnexionView connexionView = new ConnexionView();
+            new ConnexionController(connexionView, patientDAO);
+            connexionView.setVisible(true);
+        });
     }
 
     class InscriptionListener implements ActionListener {
@@ -34,7 +42,12 @@ public class InscriptionController {
             Patient patient = new Patient(nom, prenom, email, password, "nouveau");
 
             if (patientDAO.create(patient)) {
-                view.setStatus("Inscription réussie !");
+                view.setStatus("✅ Inscription réussie !");
+                view.dispose(); // on ferme la fenêtre d’inscription
+
+                // On récupère le patient nouvellement créé (recherche par email + mdp)
+                Patient newPatient = patientDAO.findByEmailAndPassword(email, password);
+                new PatientDashboardController(newPatient); // et on l'envoie sur son dashboard
             } else {
                 view.setStatus("Erreur lors de l'inscription.");
             }
