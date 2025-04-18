@@ -1,9 +1,13 @@
 package Controleur;
 
+import Model.Lieu;
+import Model.Specialiste;
+import dao.LieuDAO;
 import dao.RendezVousDAO;
 import Model.Patient;
 import Model.RendezVous;
 import Vue.PatientDashboardView;
+import dao.SpecialisteDAO;
 
 import java.util.List;
 
@@ -25,22 +29,39 @@ public class PatientDashboardController {
 
     private void loadRendezVous() {
         List<RendezVous> rdvs = rendezVousDAO.findByPatientId(patient.getId());
-
         StringBuilder builder = new StringBuilder();
+
+        SpecialisteDAO specialisteDAO = new SpecialisteDAO();
+        LieuDAO lieuDAO = new LieuDAO();
 
         if (rdvs.isEmpty()) {
             builder.append("Aucun rendez-vous trouvé.");
         } else {
             for (RendezVous rdv : rdvs) {
-                builder.append("- Le ").append(rdv.getDateHeure())
-                        .append(" avec Spécialiste ID ").append(rdv.getIdSpecialiste())
-                        .append(" à Lieu ID ").append(rdv.getIdLieu()).append("\n");
-                // Tu pourras afficher le nom du spécialiste ou lieu si tu veux plus tard
+                String date = rdv.getDateHeure().toString();
+                String specialisteNom = "Inconnu";
+                String lieuNom = "Inconnu";
+
+                Specialiste s = specialisteDAO.findById(rdv.getIdSpecialiste());
+                if (s != null) {
+                    specialisteNom = s.getPrenom() + " " + s.getNom();
+                }
+
+                Lieu l = lieuDAO.findById(rdv.getIdLieu());
+                if (l != null) {
+                    lieuNom = l.getNomEtablissement() + " - " + l.getVille();
+                }
+
+                builder.append("📅 ").append(date)
+                        .append(" – 👨‍⚕️ ").append(specialisteNom)
+                        .append(" – 🏥 ").append(lieuNom)
+                        .append("\n");
             }
         }
 
         view.afficherRendezVous(builder.toString());
     }
+
 
     private void addActions() {
         view.addLogoutListener(e -> {

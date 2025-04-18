@@ -28,6 +28,7 @@ public class ConnexionController {
         });
 
         this.view.addInscriptionListener(e -> {
+            view.dispose(); // Ferme la fenêtre de connexion
             InscriptionView inscriptionView = new InscriptionView();
             new InscriptionController(inscriptionView, patientDAO);
             inscriptionView.setVisible(true);
