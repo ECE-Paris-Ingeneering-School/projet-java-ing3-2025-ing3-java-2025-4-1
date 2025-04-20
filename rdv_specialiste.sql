@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : sam. 19 avr. 2025 à 19:18
+-- Généré le : dim. 20 avr. 2025 à 16:51
 -- Version du serveur : 8.0.42
 -- Version de PHP : 8.3.14
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `administrateur` (
   `mot_de_passe` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_admin`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `administrateur`
@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS `administrateur` (
 INSERT INTO `administrateur` (`id_admin`, `nom`, `prenom`, `email`, `mot_de_passe`) VALUES
 (1, 'Fondaneiche', 'Roméo', 'admin1@mail.com', 'admin123'),
 (2, 'Leitao', 'Mathis', 'admin2@mail.com', 'admin456'),
-(3, 'Schwartz', 'Oscar', 'admin3@gmail.com', 'admin789');
+(3, 'Schwartz', 'Oscar', 'admin3@gmail.com', 'admin789'),
+(4, 'Barco', 'Brad', 'a', 'a');
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `lieu` (
   `ville` varchar(100) DEFAULT NULL,
   `code_postal` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id_lieu`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `lieu`
@@ -119,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `type_patient` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_patient`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `patient`
@@ -132,6 +133,7 @@ INSERT INTO `patient` (`id_patient`, `nom`, `prenom`, `email`, `mot_de_passe`, `
 (4, 'Lemoine', 'Claire', 'claire.lemoine@mail.com', 'mdp321', 'nouveau'),
 (5, 'Nguyen', 'Thierry', 'thierry.nguyen@mail.com', 'mdp654', 'ancien'),
 (6, 'Roux', 'Julie', 'julie.roux@mail.com', 'mdp987', 'nouveau'),
+(12, 'Boris', 'Johnson', 'z', 'z', 'nouveau'),
 (9, 'test', 'test', 'test@mail.com', 'dsdh', 'nouveau'),
 (10, 'Doué', 'Désiré', 'désiré@gmail.com', 'lepoulet', 'nouveau'),
 (11, 'YO', 'HAN', 'y', 'y', 'nouveau');
@@ -153,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
   KEY `id_patient` (`id_patient`),
   KEY `id_specialiste` (`id_specialiste`),
   KEY `id_lieu` (`id_lieu`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `rendezvous`
@@ -162,14 +164,15 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
 INSERT INTO `rendezvous` (`id_rdv`, `date_heure`, `id_patient`, `id_specialiste`, `id_lieu`) VALUES
 (1, '2025-04-22 09:00:00', 1, 1, 1),
 (2, '2025-04-22 10:00:00', 2, 2, 2),
-(3, '2025-04-22 11:00:00', 3, 3, 3),
 (4, '2025-04-23 09:30:00', 4, 4, 4),
 (5, '2025-04-23 10:30:00', 5, 5, 5),
 (6, '2025-04-24 14:00:00', 6, 6, 6),
 (7, '2025-04-30 10:30:00', 1, 1, 5),
-(8, '2025-04-30 11:30:00', 1, 1, 1),
+(13, '2025-05-01 10:30:00', 11, 7, 1),
 (9, '2025-04-30 13:30:00', 1, 1, 1),
-(10, '2025-04-30 10:30:00', 10, 4, 4);
+(10, '2025-04-30 10:30:00', 10, 4, 4),
+(11, '2025-04-30 10:30:00', 11, 3, 3),
+(12, '2025-05-30 10:30:00', 11, 8, 4);
 
 -- --------------------------------------------------------
 
@@ -185,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `specialiste` (
   `specialisation` varchar(100) DEFAULT NULL,
   `qualification` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_specialiste`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `specialiste`
@@ -198,7 +201,7 @@ INSERT INTO `specialiste` (`id_specialiste`, `nom`, `prenom`, `specialisation`, 
 (4, 'Klein', 'Emma', 'ORL', 'Diplôme Strasbourg'),
 (5, 'Legrand', 'Nicolas', 'Gynécologue', 'Diplôme Lille II'),
 (6, 'Masson', 'Alice', 'Pédiatre', 'Diplôme Marseille'),
-(7, 'Raoult', 'Didier', 'Dermatologue', 'Diplôme Paris VI');
+(7, 'Didier ', 'Raoult', 'Dentiste', 'Diplôme Paris Université-Cité');
 
 -- --------------------------------------------------------
 
