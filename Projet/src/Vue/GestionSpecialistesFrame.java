@@ -15,19 +15,18 @@ public class GestionSpecialistesFrame extends JFrame {
     private JButton ajouterButton;
     private JButton modifierButton;
     private JButton supprimerButton;
+    private JButton retourButton;
 
     public GestionSpecialistesFrame() {
         setTitle("Gestion des spécialistes");
-        setSize(700, 500);
+        setSize(700, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Table
         table = new JTable();
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Formulaire d'ajout/modif
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(7, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createTitledBorder("Ajouter / Modifier un spécialiste"));
 
         nomField = new JTextField();
@@ -37,6 +36,7 @@ public class GestionSpecialistesFrame extends JFrame {
         ajouterButton = new JButton("Ajouter");
         modifierButton = new JButton("Modifier");
         supprimerButton = new JButton("Supprimer");
+        retourButton = new JButton("Retour");
 
         formPanel.add(new JLabel("Nom :"));
         formPanel.add(nomField);
@@ -51,10 +51,15 @@ public class GestionSpecialistesFrame extends JFrame {
         formPanel.add(new JLabel());
         formPanel.add(supprimerButton);
 
-        // Disposition générale
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(retourButton);
+
+
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
         add(formPanel, BorderLayout.SOUTH);
+
     }
 
     public void setTableModel(DefaultTableModel model) {
@@ -84,6 +89,10 @@ public class GestionSpecialistesFrame extends JFrame {
 
     public void addSupprimerListener(ActionListener listener) {
         supprimerButton.addActionListener(listener);
+    }
+
+    public void addRetourListener(ActionListener listener) {
+        retourButton.addActionListener(listener);
     }
 
     public void clearFields() {

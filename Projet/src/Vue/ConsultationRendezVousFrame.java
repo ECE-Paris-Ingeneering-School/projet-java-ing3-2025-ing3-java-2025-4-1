@@ -12,6 +12,7 @@ public class ConsultationRendezVousFrame extends JFrame {
     private JButton filterButton;
     private JButton deleteButton;
     private JButton modifierButton;
+    private JButton retourButton;
     private JComboBox<String> patientFilter;
     private JComboBox<String> specialisteFilter;
     private JComboBox<String> lieuFilter;
@@ -32,7 +33,21 @@ public class ConsultationRendezVousFrame extends JFrame {
         filterButton = new JButton("Filtrer");
         deleteButton = new JButton("Supprimer");
         modifierButton = new JButton("Modifier");
+        retourButton = new JButton("Retour");
 
+        // Panel haut : gauche (retour), droite (rafraîchir)
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.add(retourButton);
+
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.add(refreshButton);
+
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(rightPanel, BorderLayout.EAST);
+
+        // Panel filtres et modification
         JPanel filterPanel = new JPanel(new GridLayout(3, 4, 10, 5));
         filterPanel.setBorder(BorderFactory.createTitledBorder("Filtres & Modification"));
         filterPanel.add(new JLabel("Patient :"));
@@ -49,9 +64,6 @@ public class ConsultationRendezVousFrame extends JFrame {
 
         table = new JTable();
         JScrollPane scrollPane = new JScrollPane(table);
-
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        topPanel.add(refreshButton);
 
         setLayout(new BorderLayout());
         add(topPanel, BorderLayout.NORTH);
@@ -117,5 +129,9 @@ public class ConsultationRendezVousFrame extends JFrame {
 
     public void addModifierListener(ActionListener listener) {
         modifierButton.addActionListener(listener);
+    }
+
+    public void addRetourListener(ActionListener listener) {
+        retourButton.addActionListener(listener);
     }
 }

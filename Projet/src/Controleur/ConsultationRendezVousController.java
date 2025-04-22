@@ -105,6 +105,12 @@ public class ConsultationRendezVousController {
             }
         });
 
+        view.addRetourListener(e -> {
+            view.dispose();
+            new AdministrationController();
+        });
+
+
         view.setVisible(true);
     }
 

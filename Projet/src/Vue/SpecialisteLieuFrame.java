@@ -11,11 +11,12 @@ public class SpecialisteLieuFrame extends JFrame {
     private JComboBox<String> lieuCombo;
     private JButton affecterButton;
     private JButton supprimerButton;
+    private JButton retourButton;
     private JTable table;
 
     public SpecialisteLieuFrame() {
         setTitle("Affectation Spécialiste ↔ Lieu");
-        setSize(700, 500);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -23,26 +24,45 @@ public class SpecialisteLieuFrame extends JFrame {
         lieuCombo = new JComboBox<>();
         affecterButton = new JButton("Affecter");
         supprimerButton = new JButton("Supprimer l'affectation");
+        retourButton = new JButton("Retour");
 
-        JPanel topPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        topPanel.setBorder(BorderFactory.createTitledBorder("Nouvelle affectation"));
+        // Panel du haut (retour)
+        JPanel topPanel = new JPanel(new BorderLayout());
+        JPanel leftTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftTopPanel.add(retourButton);
+        topPanel.add(leftTopPanel, BorderLayout.WEST);
 
-        topPanel.add(new JLabel("Spécialiste :"));
-        topPanel.add(specialisteCombo);
-        topPanel.add(new JLabel("Lieu :"));
-        topPanel.add(lieuCombo);
+        // Panel de sélection
+        JPanel selectionPanel = new JPanel();
+        selectionPanel.setLayout(new GridBagLayout());
+        selectionPanel.setBorder(BorderFactory.createTitledBorder("Nouvelle affectation"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0; gbc.gridy = 0;
+        selectionPanel.add(new JLabel("Spécialiste :"), gbc);
+        gbc.gridx = 1;
+        selectionPanel.add(specialisteCombo, gbc);
+        gbc.gridx = 0; gbc.gridy = 1;
+        selectionPanel.add(new JLabel("Lieu :"), gbc);
+        gbc.gridx = 1;
+        selectionPanel.add(lieuCombo, gbc);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        // Panel des boutons action
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.add(affecterButton);
         buttonPanel.add(supprimerButton);
 
+        // Table
         table = new JTable();
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Affectations existantes"));
 
-        setLayout(new BorderLayout());
+        // Layout global
+        setLayout(new BorderLayout(10, 10));
         add(topPanel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.CENTER);
-        add(scrollPane, BorderLayout.SOUTH);
+        add(selectionPanel, BorderLayout.WEST);
+        add(scrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public void setSpecialistes(String[] noms) {
@@ -69,6 +89,10 @@ public class SpecialisteLieuFrame extends JFrame {
         supprimerButton.addActionListener(listener);
     }
 
+    public void addRetourListener(ActionListener listener) {
+        retourButton.addActionListener(listener);
+    }
+
     public void setTableModel(DefaultTableModel model) {
         table.setModel(model);
     }
@@ -82,7 +106,7 @@ public class SpecialisteLieuFrame extends JFrame {
         if (row != -1) {
             String idSpec = table.getValueAt(row, 0).toString();
             String idLieu = table.getValueAt(row, 2).toString();
-            return new String[] { idSpec, idLieu };
+            return new String[]{idSpec, idLieu};
         }
         return null;
     }

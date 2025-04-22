@@ -22,6 +22,12 @@ public class StatistiquesController {
         view.addParLieuListener(e -> afficherParLieu());
         view.addParMoisListener(e -> afficherParMois());
 
+        view.addRetourListener(e -> {
+            view.dispose();
+            new AdministrationController();
+        });
+
+
         view.setVisible(true);
     }
 

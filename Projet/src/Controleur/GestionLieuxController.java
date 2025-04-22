@@ -86,6 +86,12 @@ public class GestionLieuxController {
             }
         });
 
+        view.addRetourListener(e -> {
+            view.dispose();
+            new AdministrationController();
+        });
+
+
         view.setVisible(true);
     }
 

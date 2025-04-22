@@ -15,10 +15,11 @@ public class GestionLieuxFrame extends JFrame {
     private JButton ajouterButton;
     private JButton modifierButton;
     private JButton supprimerButton;
+    private JButton retourButton;
 
     public GestionLieuxFrame() {
         setTitle("Gestion des lieux");
-        setSize(750, 500);
+        setSize(750, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -35,6 +36,7 @@ public class GestionLieuxFrame extends JFrame {
         ajouterButton = new JButton("Ajouter");
         modifierButton = new JButton("Modifier");
         supprimerButton = new JButton("Supprimer");
+        retourButton = new JButton("Retour");
 
         formPanel.add(new JLabel("Nom de l'établissement :"));
         formPanel.add(nomField);
@@ -46,10 +48,13 @@ public class GestionLieuxFrame extends JFrame {
         formPanel.add(codePostalField);
         formPanel.add(ajouterButton);
         formPanel.add(modifierButton);
-        formPanel.add(new JLabel());
         formPanel.add(supprimerButton);
 
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(retourButton);
+
         setLayout(new BorderLayout());
+        add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(formPanel, BorderLayout.SOUTH);
     }
@@ -81,4 +86,5 @@ public class GestionLieuxFrame extends JFrame {
     public void addAjouterListener(ActionListener l) { ajouterButton.addActionListener(l); }
     public void addModifierListener(ActionListener l) { modifierButton.addActionListener(l); }
     public void addSupprimerListener(ActionListener l) { supprimerButton.addActionListener(l); }
+    public void addRetourListener(ActionListener l) { retourButton.addActionListener(l); }
 }

@@ -12,30 +12,31 @@ public class AdministrationController {
     public AdministrationController() {
         this.view = new AdministrationFrame();
 
-        // Action : Gérer les spécialistes
         view.addSpecialistesListener(e -> {
+            view.dispose();
             new GestionSpecialistesController();
         });
 
-        // Action : Gérer les lieux
         view.addLieuxListener(e -> {
+            view.dispose();
             new GestionLieuxController();
         });
 
-        // Action : Consulter les RDV
         view.addRendezVousListener(e -> {
+            view.dispose();
             new ConsultationRendezVousController();
         });
 
-        // Action : Statistiques
-        view.addStatsListener(e -> {
-                    new StatistiquesController();
-                });
-
-        // Action:
         view.addSpecialistesLieuListener(e -> {
+            view.dispose();
             new SpecialisteLieuController();
         });
+
+        view.addStatsListener(e -> {
+            view.dispose();
+            new StatistiquesController();
+        });
+
 
         // Action : Déconnexion
         view.addLogoutListener(e -> {
