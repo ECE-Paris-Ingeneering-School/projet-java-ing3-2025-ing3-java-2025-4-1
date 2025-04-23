@@ -1,50 +1,71 @@
+
 package Vue;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class AdministrationFrame extends JFrame {
-    private JTextArea infoArea;
+    private JButton btnSpecialistes;
+    private JButton btnLieux;
+    private JButton btnRendezVous;
+    private JButton btnStats;
+    private JButton btnLogout;
+    private JButton btnAffectations;
+
 
     public AdministrationFrame() {
-        setTitle("Administration");
-        setSize(500, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Interface Administrateur");
+        setSize(400, 300);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new GridLayout(5, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        JButton manageSpecialistesButton = new JButton("Gérer les Spécialistes");
-        JButton manageRendezVousButton = new JButton("Gérer les Rendez-vous");
-        JButton viewReportsButton = new JButton("Voir les Rapports");
-        infoArea = new JTextArea();
+        btnSpecialistes = new JButton("Gérer les spécialistes");
+        btnLieux = new JButton("Gérer les lieux");
+        btnRendezVous = new JButton("Consulter les rendez-vous");
+        btnStats = new JButton("Voir les statistiques");
+        btnLogout = new JButton("Déconnexion");
+        btnAffectations = new JButton("Gérer les affectations");
 
-        panel.add(manageSpecialistesButton);
-        panel.add(manageRendezVousButton);
-        panel.add(viewReportsButton);
-        panel.add(new JScrollPane(infoArea));
-
-        manageSpecialistesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Logique de gestion des spécialistes
-            }
-        });
-
-        manageRendezVousButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Logique de gestion des rendez-vous
-            }
-        });
-
-        viewReportsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Logique d'affichage des rapports
-            }
-        });
+        panel.add(btnSpecialistes);
+        panel.add(btnLieux);
+        panel.add(btnRendezVous);
+        panel.add(btnStats);
+        panel.add(btnAffectations);
+        panel.add(btnLogout);
 
         add(panel);
     }
-}
 
+    public void addSpecialistesListener(ActionListener listener) {
+        btnSpecialistes.addActionListener(listener);
+    }
+
+    public void addLieuxListener(ActionListener listener) {
+        btnLieux.addActionListener(listener);
+    }
+
+    public void addRendezVousListener(ActionListener listener) {
+        btnRendezVous.addActionListener(listener);
+    }
+
+    public void addStatsListener(ActionListener listener) {
+        btnStats.addActionListener(listener);
+    }
+
+    public void addLogoutListener(ActionListener listener) {
+        btnLogout.addActionListener(listener);
+    }
+
+    public void addSpecialistesLieuListener(ActionListener listener) {
+        btnAffectations.addActionListener(listener);
+    }
+
+
+
+
+}

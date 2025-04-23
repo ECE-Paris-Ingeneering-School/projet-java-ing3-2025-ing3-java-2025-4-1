@@ -78,4 +78,39 @@ public class SpecialisteDAO {
         }
         return specialistes;
     }
+
+    public boolean update(Specialiste specialiste) {
+        String sql = "UPDATE Specialiste SET nom = ?, prenom = ?, specialisation = ?, qualification = ? WHERE id_specialiste = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, specialiste.getNom());
+            stmt.setString(2, specialiste.getPrenom());
+            stmt.setString(3, specialiste.getSpecialisation());
+            stmt.setString(4, specialiste.getQualification());
+            stmt.setInt(5, specialiste.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(int id) {
+        String sql = "DELETE FROM Specialiste WHERE id_specialiste = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

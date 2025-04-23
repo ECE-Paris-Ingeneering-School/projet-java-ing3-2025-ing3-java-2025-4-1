@@ -3,6 +3,8 @@ package Controleur;
 import Vue.ConnexionView;
 import dao.PatientDAO;
 import Model.Patient;
+import dao.AdministrateurDAO;
+import Model.Administrateur;
 import Vue.InscriptionView;
 
 import java.awt.event.ActionEvent;
@@ -21,7 +23,7 @@ public class InscriptionController {
         view.addRetourConnexionListener(e -> {
             view.dispose(); // ferme la vue inscription
             ConnexionView connexionView = new ConnexionView();
-            new ConnexionController(connexionView, patientDAO);
+            new ConnexionController(connexionView, patientDAO, new AdministrateurDAO());
             connexionView.setVisible(true);
         });
     }

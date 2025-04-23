@@ -3,8 +3,9 @@ package Controleur;
 import dao.*;
 import Model.*;
 import Vue.PatientDashboardView;
-
+import Vue.ConnexionView;
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,26 +26,93 @@ public class PatientDashboardController {
 
         refresh();
 
-        view.addLogoutListener(e -> view.dispose());
+        view.addAnnulerRdvButtonListener(e -> {
+            String selection = view.getRdvTextSelection();
+            if (selection == null || !selection.contains("[")) {
+                JOptionPane.showMessageDialog(view, "❌ Clique d'abord sur un rendez-vous.");
+                return;
+            }
 
-        view.addPrendreRdvListener(e -> {
-            new PriseRendezVousController(patient, this);
+            try {
+                int id = Integer.parseInt(selection.substring(selection.indexOf("[") + 1, selection.indexOf("]")));
+
+                JLabel message = new JLabel("<html><body style='text-align:center;'>" +
+                        "⚠️ <b>Êtes-vous sûr de vouloir supprimer ce rendez-vous ?</b><br><br>" +
+                        "Cette action est irréversible." +
+                        "</body></html>");
+                message.setFont(new Font("SansSerif", Font.PLAIN, 14));
+                int confirm = JOptionPane.showConfirmDialog(view, message, "🗑️ Confirmation de suppression", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    if (rendezVousDAO.delete(id)) {
+                        JOptionPane.showMessageDialog(view, "✅ Rendez-vous annulé.");
+                        refresh();
+                    } else {
+                        JOptionPane.showMessageDialog(view, "❌ Échec de l'annulation.");
+                    }
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, "⚠️ Erreur lors de la suppression du RDV.");
+                ex.printStackTrace();
+            }
         });
 
-        view.addAnnulerRdvListener(e -> {
-            String selection = view.getRdvSelectionne();
-            if (selection == null) return;
 
-            int id = Integer.parseInt(selection.substring(selection.indexOf("[") + 1, selection.indexOf("]")));
 
-            int confirm = JOptionPane.showConfirmDialog(view, "Confirmer l'annulation ?", "Confirmation", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                if (rendezVousDAO.delete(id)) {
-                    JOptionPane.showMessageDialog(view, "✅ Rendez-vous annulé.");
-                    refresh();
-                } else {
-                    JOptionPane.showMessageDialog(view, "❌ Échec de l'annulation.");
+        view.addLogoutListener(e -> {
+            view.dispose();
+            ConnexionView loginView = new ConnexionView();
+            new ConnexionController(loginView, new PatientDAO(), new AdministrateurDAO());
+            loginView.setVisible(true);
+        });
+
+
+        // Charger spécialistes et lieux dans le formulaire
+        List<Specialiste> specialistes = specialisteDAO.findAll();
+        List<Lieu> lieux = lieuDAO.findAll();
+
+        view.setSpecialistes(specialistes.stream()
+                .map(s -> s.getPrenom() + " " + s.getNom() + " (ID:" + s.getId() + ")")
+                .toArray(String[]::new));
+
+        view.setLieux(lieux.stream()
+                .map(l -> l.getNomEtablissement() + " - " + l.getVille() + " (ID:" + l.getId() + ")")
+                .toArray(String[]::new));
+
+        // Écoute le clic sur le bouton Valider RDV
+        view.addValiderRdvListener(e -> {
+            try {
+                String sText = view.getSelectedSpecialiste();
+                String lText = view.getSelectedLieu();
+                String dateText = view.getSelectedDateTime();
+
+                if (sText == null || lText == null || dateText.isEmpty()) {
+                    view.setStatusRdv("❌ Veuillez remplir tous les champs.");
+                    return;
                 }
+
+                int idSpecialiste = Integer.parseInt(sText.substring(sText.indexOf("ID:") + 3, sText.indexOf(")")));
+                int idLieu = Integer.parseInt(lText.substring(lText.indexOf("ID:") + 3, lText.indexOf(")")));
+                java.time.LocalDateTime dateHeure = java.time.LocalDateTime.parse(dateText.replace(" ", "T"));
+
+                // Vérifier le créneau
+                if (!rendezVousDAO.isCreneauDisponible(idSpecialiste, idLieu, dateHeure)) {
+                    view.setStatusRdv("❌ Ce créneau est déjà réservé.");
+                    return;
+                }
+
+                RendezVous rdv = new RendezVous(dateHeure, patient.getId(), idSpecialiste, idLieu);
+                if (rendezVousDAO.create(rdv)) {
+                    view.setStatusRdv("✅ Rendez-vous confirmé !");
+                    refresh(); // Mettre à jour l’onglet “Mes RDV”
+                    view.switchToTab(1); // On revient à l’onglet “Mes RDV”
+                } else {
+                    view.setStatusRdv("❌ Échec lors de la prise de rendez-vous.");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                view.setStatusRdv("⚠️ Erreur dans les champs. Format date : YYYY-MM-DD HH:MM");
             }
         });
 
@@ -68,7 +136,8 @@ public class PatientDashboardController {
                 Lieu l = lieuDAO.findById(rdv.getIdLieu());
                 String lieuNom = (l != null) ? l.getNomEtablissement() + " - " + l.getVille() : "Inconnu";
 
-                builder.append("📅 ").append(date)
+                builder.append("[").append(rdv.getId()).append("] ")
+                        .append("📅 ").append(date)
                         .append(" – 👨‍⚕️ ").append(specialisteNom)
                         .append(" – 🏥 ").append(lieuNom)
                         .append("\n");
@@ -79,6 +148,6 @@ public class PatientDashboardController {
         }
 
         view.afficherRendezVous(builder.toString());
-        view.setRdvListe(rdvComboListe.toArray(new String[0]));
+        //view.setRdvListe(rdvComboListe.toArray(new String[0]));
     }
 }

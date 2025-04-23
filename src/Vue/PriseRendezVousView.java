@@ -29,8 +29,10 @@ public class PriseRendezVousView extends JFrame {
         statusLabel.setForeground(new Color(180, 0, 0));
         statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        mainPanel.add(labelWithField("Spécialiste :", specialisteCombo));
         mainPanel.add(labelWithField("Lieu :", lieuCombo));
+        mainPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(labelWithField("Spécialiste :", specialisteCombo));
+        mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(labelWithField("Date et heure (YYYY-MM-DD HH:MM) :", dateTimeField));
         mainPanel.add(Box.createVerticalStrut(15));
         mainPanel.add(validerButton);

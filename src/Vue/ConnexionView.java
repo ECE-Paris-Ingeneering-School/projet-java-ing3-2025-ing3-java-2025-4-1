@@ -37,9 +37,11 @@ public class ConnexionView extends JFrame {
 
         mainPanel.add(titleLabel);
         mainPanel.add(labelWithField("Email :", emailField));
+        mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(labelWithField("Mot de passe :", passwordField));
         mainPanel.add(Box.createVerticalStrut(10));
         mainPanel.add(loginButton);
+        mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(inscriptionButton);
         mainPanel.add(Box.createVerticalStrut(10));
         mainPanel.add(statusLabel);
