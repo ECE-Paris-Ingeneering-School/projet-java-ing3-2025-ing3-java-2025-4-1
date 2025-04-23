@@ -34,6 +34,7 @@ public class PatientDashboardView extends JFrame {
     private JLabel statusRdvLabel;
 
     private List<String> rdvLignes = new ArrayList<>();
+    private ActionListener lieuChangeListener;
 
     public PatientDashboardView(String nomPatient) {
         setTitle("Espace personnel - " + nomPatient);
@@ -112,6 +113,11 @@ public class PatientDashboardView extends JFrame {
 
         specialisteCombo = new JComboBox<>();
         lieuCombo = new JComboBox<>();
+        lieuCombo.addActionListener(e -> {
+            if (lieuChangeListener != null) {
+                lieuChangeListener.actionPerformed(e);
+            }
+        });
 
         String[] jours = new String[31];
         for (int i = 0; i < 31; i++) jours[i] = String.format("%02d", i + 1);
@@ -141,8 +147,8 @@ public class PatientDashboardView extends JFrame {
         heurePanel.add(minuteCombo);
         heurePanel.add(new JLabel("min"));
 
-        priseRdvPanel.add(labelWithField("Spécialiste :", specialisteCombo));
         priseRdvPanel.add(labelWithField("Lieu :", lieuCombo));
+        priseRdvPanel.add(labelWithField("Spécialiste :", specialisteCombo));
         priseRdvPanel.add(Box.createVerticalStrut(10));
         priseRdvPanel.add(datePanel);
         priseRdvPanel.add(heurePanel);
@@ -185,6 +191,10 @@ public class PatientDashboardView extends JFrame {
         panel.add(lbl, BorderLayout.WEST);
         panel.add(field, BorderLayout.CENTER);
         return panel;
+    }
+
+    public void setLieuChangeListener(ActionListener listener) {
+        this.lieuChangeListener = listener;
     }
 
     public void afficherRendezVous(String texte) {

@@ -39,4 +39,7 @@ public class Specialiste {
         return qualification;
     }
 
+    public int getIdLieu() {
+        return id;
+    }
 }

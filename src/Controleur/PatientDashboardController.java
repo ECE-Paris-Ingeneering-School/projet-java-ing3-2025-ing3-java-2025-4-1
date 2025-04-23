@@ -13,6 +13,7 @@ public class PatientDashboardController {
     private PatientDashboardView view;
     private RendezVousDAO rendezVousDAO;
     private SpecialisteDAO specialisteDAO;
+    private SpecialisteLieuDAO specialisteLieuDAO;
     private LieuDAO lieuDAO;
     private Patient patient;
 
@@ -23,6 +24,7 @@ public class PatientDashboardController {
         this.rendezVousDAO = new RendezVousDAO();
         this.specialisteDAO = new SpecialisteDAO();
         this.lieuDAO = new LieuDAO();
+        this.specialisteLieuDAO = new SpecialisteLieuDAO();
 
         refresh();
 
@@ -57,8 +59,6 @@ public class PatientDashboardController {
             }
         });
 
-
-
         view.addLogoutListener(e -> {
             view.dispose();
             ConnexionView loginView = new ConnexionView();
@@ -66,20 +66,26 @@ public class PatientDashboardController {
             loginView.setVisible(true);
         });
 
-
-        // Charger spécialistes et lieux dans le formulaire
-        List<Specialiste> specialistes = specialisteDAO.findAll();
         List<Lieu> lieux = lieuDAO.findAll();
-
-        view.setSpecialistes(specialistes.stream()
-                .map(s -> s.getPrenom() + " " + s.getNom() + " (ID:" + s.getId() + ")")
-                .toArray(String[]::new));
-
         view.setLieux(lieux.stream()
                 .map(l -> l.getNomEtablissement() + " - " + l.getVille() + " (ID:" + l.getId() + ")")
                 .toArray(String[]::new));
 
-        // Écoute le clic sur le bouton Valider RDV
+        view.setLieuChangeListener(e -> {
+            String lText = view.getSelectedLieu();
+            if (lText == null || !lText.contains("ID:")) return;
+
+            int idLieu = Integer.parseInt(lText.substring(lText.indexOf("ID:") + 3, lText.indexOf(")")));
+
+            List<Specialiste> specialistesAssocies = specialisteLieuDAO.findSpecialistesByLieu(idLieu);
+
+            String[] noms = specialistesAssocies.stream()
+                    .map(s -> s.getPrenom() + " " + s.getNom() + " (ID:" + s.getId() + ")")
+                    .toArray(String[]::new);
+
+            view.setSpecialistes(noms);
+        });
+
         view.addValiderRdvListener(e -> {
             try {
                 String sText = view.getSelectedSpecialiste();
@@ -95,7 +101,6 @@ public class PatientDashboardController {
                 int idLieu = Integer.parseInt(lText.substring(lText.indexOf("ID:") + 3, lText.indexOf(")")));
                 java.time.LocalDateTime dateHeure = java.time.LocalDateTime.parse(dateText.replace(" ", "T"));
 
-                // Vérifier le créneau
                 if (!rendezVousDAO.isCreneauDisponible(idSpecialiste, idLieu, dateHeure)) {
                     view.setStatusRdv("❌ Ce créneau est déjà réservé.");
                     return;
@@ -104,8 +109,8 @@ public class PatientDashboardController {
                 RendezVous rdv = new RendezVous(dateHeure, patient.getId(), idSpecialiste, idLieu);
                 if (rendezVousDAO.create(rdv)) {
                     view.setStatusRdv("✅ Rendez-vous confirmé !");
-                    refresh(); // Mettre à jour l’onglet “Mes RDV”
-                    view.switchToTab(1); // On revient à l’onglet “Mes RDV”
+                    refresh();
+                    view.switchToTab(1);
                 } else {
                     view.setStatusRdv("❌ Échec lors de la prise de rendez-vous.");
                 }
@@ -122,7 +127,6 @@ public class PatientDashboardController {
     public void refresh() {
         List<RendezVous> rdvs = rendezVousDAO.findByPatientId(patient.getId());
         StringBuilder builder = new StringBuilder();
-        List<String> rdvComboListe = new ArrayList<>();
 
         if (rdvs.isEmpty()) {
             builder.append("Aucun rendez-vous trouvé.");
@@ -141,13 +145,9 @@ public class PatientDashboardController {
                         .append(" – 👨‍⚕️ ").append(specialisteNom)
                         .append(" – 🏥 ").append(lieuNom)
                         .append("\n");
-
-                String label = "[" + rdv.getId() + "] " + date;
-                rdvComboListe.add(label);
             }
         }
 
         view.afficherRendezVous(builder.toString());
-        //view.setRdvListe(rdvComboListe.toArray(new String[0]));
     }
 }
