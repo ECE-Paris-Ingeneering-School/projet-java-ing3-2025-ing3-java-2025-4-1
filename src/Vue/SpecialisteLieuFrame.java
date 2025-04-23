@@ -16,53 +16,58 @@ public class SpecialisteLieuFrame extends JFrame {
 
     public SpecialisteLieuFrame() {
         setTitle("Affectation Spécialiste ↔ Lieu");
-        setSize(800, 600);
+        setSize(850, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        // Components
         specialisteCombo = new JComboBox<>();
         lieuCombo = new JComboBox<>();
         affecterButton = new JButton("Affecter");
         supprimerButton = new JButton("Supprimer l'affectation");
         retourButton = new JButton("Retour");
 
-        // Panel du haut (retour)
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel leftTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        leftTopPanel.add(retourButton);
-        topPanel.add(leftTopPanel, BorderLayout.WEST);
-
-        // Panel de sélection
-        JPanel selectionPanel = new JPanel();
-        selectionPanel.setLayout(new GridBagLayout());
-        selectionPanel.setBorder(BorderFactory.createTitledBorder("Nouvelle affectation"));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 0; gbc.gridy = 0;
-        selectionPanel.add(new JLabel("Spécialiste :"), gbc);
-        gbc.gridx = 1;
-        selectionPanel.add(specialisteCombo, gbc);
-        gbc.gridx = 0; gbc.gridy = 1;
-        selectionPanel.add(new JLabel("Lieu :"), gbc);
-        gbc.gridx = 1;
-        selectionPanel.add(lieuCombo, gbc);
-
-        // Panel des boutons action
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        buttonPanel.add(affecterButton);
-        buttonPanel.add(supprimerButton);
-
-        // Table
         table = new JTable();
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Affectations existantes"));
 
-        // Layout global
+        // Top panel (Retour button)
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(retourButton);
+
+        // Left panel (Form)
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(BorderFactory.createTitledBorder("Nouvelle affectation"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Spécialiste :"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(specialisteCombo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        formPanel.add(new JLabel("Lieu :"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(lieuCombo, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formPanel.add(affecterButton, gbc);
+
+        gbc.gridy = 3;
+        formPanel.add(supprimerButton, gbc);
+
+        // Split layout
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, scrollPane);
+        splitPane.setResizeWeight(0.35);
+        splitPane.setDividerLocation(300);
+
+        // Main layout
         setLayout(new BorderLayout(10, 10));
         add(topPanel, BorderLayout.NORTH);
-        add(selectionPanel, BorderLayout.WEST);
-        add(scrollPane, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(splitPane, BorderLayout.CENTER);
     }
 
     public void setSpecialistes(String[] noms) {
