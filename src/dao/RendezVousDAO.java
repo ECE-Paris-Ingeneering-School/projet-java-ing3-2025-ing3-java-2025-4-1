@@ -1,4 +1,3 @@
-
 package dao;
 
 import Model.RendezVous;
@@ -11,7 +10,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.SQLException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -287,6 +288,21 @@ public class RendezVousDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<String> genererCreneauxDisponibles(int idSpecialiste, int idLieu, LocalDate date) {
+        List<String> dispo = new ArrayList<>();
+        LocalTime debut = LocalTime.of(8, 0);
+        LocalTime fin = LocalTime.of(18, 0);
+
+        for (LocalTime time = debut; time.isBefore(fin); time = time.plusMinutes(30)) {
+            LocalDateTime dateTime = LocalDateTime.of(date, time);
+            if (isCreneauDisponible(idSpecialiste, idLieu, dateTime)) {
+                dispo.add(time.toString()); // ex: "10:30"
+            }
+        }
+
+        return dispo;
     }
 
 }
