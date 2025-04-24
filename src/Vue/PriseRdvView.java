@@ -37,7 +37,7 @@ public class PriseRdvView extends JFrame {
         for (int i = 0; i < 31; i++) jours[i] = String.format("%02d", i + 1);
         String[] mois = {"01 - Jan", "02 - Fév", "03 - Mar", "04 - Avr", "05 - Mai", "06 - Juin",
                 "07 - Juil", "08 - Août", "09 - Sep", "10 - Oct", "11 - Nov", "12 - Déc"};
-        String[] annees = {"2024", "2025", "2026"};
+        String[] annees = {"2025", "2026", "2027"};
 
         jourCombo = new JComboBox<>(jours);
         moisCombo = new JComboBox<>(mois);

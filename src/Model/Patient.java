@@ -45,4 +45,22 @@ public class Patient {
         return motDePasse;
     }
 
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setTypePatient(String typePatient) {
+        this.typePatient = typePatient;
+    }
 }

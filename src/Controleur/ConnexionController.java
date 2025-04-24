@@ -35,7 +35,7 @@ public class ConnexionController {
             Patient patient = patientDAO.findByEmailAndPassword(email, password);
             if (patient != null) {
                 view.dispose();
-                new PatientDashboardController(patient);
+                new PatientHomeController(patient);
             } else {
                 view.setStatus("Email ou mot de passe incorrect.");
             }
