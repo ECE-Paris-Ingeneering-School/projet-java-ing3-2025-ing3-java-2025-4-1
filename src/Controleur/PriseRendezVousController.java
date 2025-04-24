@@ -7,7 +7,6 @@ import Vue.PriseRendezVousView;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PriseRendezVousController {
     private PriseRendezVousView view;
