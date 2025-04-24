@@ -15,13 +15,11 @@ public class PriseRendezVousController {
     private SpecialisteDAO specialisteDAO;
     private LieuDAO lieuDAO;
     private Patient patient;
-    private PatientDashboardController dashboard;
     private List<Specialiste> specialistes;
     private List<Lieu> lieux;
 
-    public PriseRendezVousController(Patient patient, PatientDashboardController dashboard) {
+    public PriseRendezVousController(Patient patient) {
         this.patient = patient;
-        this.dashboard = dashboard;
         this.view = new PriseRendezVousView();
         this.rendezVousDAO = new RendezVousDAO();
         this.specialisteDAO = new SpecialisteDAO();
@@ -59,7 +57,6 @@ public class PriseRendezVousController {
             if (rendezVousDAO.create(rdv)) {
                 view.setStatus("✅ Rendez-vous enregistré !");
                 view.dispose();
-                dashboard.refresh();
             } else {
                 view.setStatus("❌ Échec de l'enregistrement.");
             }
