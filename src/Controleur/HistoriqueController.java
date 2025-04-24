@@ -1,80 +1,95 @@
 package Controleur;
 
 import Vue.HistoriqueView;
-import Model.*;
 import dao.*;
-
+import Model.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 public class HistoriqueController {
     private HistoriqueView view;
-    private Patient patient;
     private RendezVousDAO rendezVousDAO;
     private SpecialisteDAO specialisteDAO;
     private LieuDAO lieuDAO;
+    private Patient patient;
 
-    private Map<String, RendezVous> mapRdvByLabel = new HashMap<>();
+    private List<RendezVous> rdvList;
 
     public HistoriqueController(Patient patient) {
         this.patient = patient;
+        this.view = new HistoriqueView(patient.getPrenom());
         this.rendezVousDAO = new RendezVousDAO();
         this.specialisteDAO = new SpecialisteDAO();
         this.lieuDAO = new LieuDAO();
 
-        this.view = new HistoriqueView(patient.getPrenom());
-
         loadHistorique();
-
-        view.addRdvSelectionListener(e -> {
-            String label = view.getSelectedRdv();
-            if (label == null) return;
-            RendezVous rdv = mapRdvByLabel.get(label);
-            view.setNoteText(rdv.getNote());
-        });
-
-        view.addSaveNoteListener(e -> {
-            String label = view.getSelectedRdv();
-            if (label == null) return;
-
-            RendezVous rdv = mapRdvByLabel.get(label);
-            String note = view.getNoteText();
-
-            if (rendezVousDAO.updateNote(rdv.getId(), note)) {
-                JOptionPane.showMessageDialog(view, "✅ Note enregistrée !");
-            } else {
-                JOptionPane.showMessageDialog(view, "❌ Erreur lors de l'enregistrement.");
-            }
-        });
-
         view.addRetourListener(e -> {
-            view.dispose();
-            new PatientHomeController(patient);
+            view.dispose(); // ferme la fenêtre actuelle
+            new PatientHomeController(patient); // rouvre le dashboard
+        });
+
+        view.addNoterListener(e -> {
+            int selectedRow = view.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(view, "❌ Sélectionnez un rendez-vous.");
+                return;
+            }
+
+            RendezVous rdv = rdvList.get(selectedRow);
+
+            Integer[] notes = {0, 1, 2, 3, 4, 5};
+            Integer nouvelleNote = (Integer) JOptionPane.showInputDialog(
+                    view,
+                    "Attribuez une note à ce rendez-vous :",
+                    "Notation",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    notes,
+                    rdv.getNote()
+            );
+
+            if (nouvelleNote != null) {
+                rdv.setNote(nouvelleNote);
+                if (rendezVousDAO.update(rdv)) {
+                    JOptionPane.showMessageDialog(view, "✅ Note mise à jour !");
+                    loadHistorique();
+                } else {
+                    JOptionPane.showMessageDialog(view, "❌ Échec de la mise à jour.");
+                }
+            }
         });
 
         view.setVisible(true);
     }
 
     private void loadHistorique() {
-        List<RendezVous> rdvs = rendezVousDAO.findByPatientId(patient.getId());
-        List<String> labels = new ArrayList<>();
-        mapRdvByLabel.clear();
+        List<RendezVous> tous = rendezVousDAO.findByPatientId(patient.getId());
+        rdvList = tous.stream()
+                .filter(rdv -> rdv.getDateHeure().isBefore(LocalDateTime.now()))
+                .toList();
 
-        for (RendezVous rdv : rdvs) {
-            if (rdv.getDateHeure().isBefore(LocalDateTime.now())) {
-                Specialiste s = specialisteDAO.findById(rdv.getIdSpecialiste());
-                Lieu l = lieuDAO.findById(rdv.getIdLieu());
+        String[] columns = {"Date", "Spécialiste", "Lieu", "Note"};
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
 
-                String label = "[" + rdv.getId() + "] " + rdv.getDateHeure().toLocalDate()
-                        + " – " + (s != null ? s.getPrenom() + " " + s.getNom() : "Spécialiste inconnu")
-                        + " @ " + (l != null ? l.getNomEtablissement() : "Lieu inconnu");
+        for (RendezVous rdv : rdvList) {
+            Specialiste s = specialisteDAO.findById(rdv.getIdSpecialiste());
+            String specialisteNom = (s != null) ? s.getPrenom() + " " + s.getNom() : "Inconnu";
 
-                labels.add(label);
-                mapRdvByLabel.put(label, rdv);
-            }
+            Lieu l = lieuDAO.findById(rdv.getIdLieu());
+            String lieuNom = (l != null) ? l.getNomEtablissement() + " - " + l.getVille() : "Inconnu";
+
+            String[] row = {
+                    rdv.getDateHeure().toString(),
+                    specialisteNom,
+                    lieuNom,
+                    String.valueOf(rdv.getNote())
+            };
+
+            model.addRow(row);
         }
 
-        view.setRdvList(labels.toArray(new String[0]));
+        view.setTableModel(model);
     }
 }
