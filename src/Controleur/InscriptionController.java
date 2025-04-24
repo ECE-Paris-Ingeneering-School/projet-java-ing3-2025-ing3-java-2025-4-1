@@ -49,7 +49,7 @@ public class InscriptionController {
 
                 // On récupère le patient nouvellement créé (recherche par email + mdp)
                 Patient newPatient = patientDAO.findByEmailAndPassword(email, password);
-                new PatientDashboardController(newPatient); // et on l'envoie sur son dashboard
+                new PatientHomeController(newPatient);
             } else {
                 view.setStatus("Erreur lors de l'inscription.");
             }
