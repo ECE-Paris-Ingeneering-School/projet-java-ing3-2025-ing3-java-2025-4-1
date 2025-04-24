@@ -79,6 +79,66 @@ public class SpecialisteDAO {
         return specialistes;
     }
 
+    public List<String> findAllSpecialisations() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT specialisation FROM Specialiste";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                list.add(rs.getString("specialisation"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> findAllQualifications() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT qualification FROM Specialiste";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                list.add(rs.getString("qualification"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Specialiste> findBySpecialisationAndQualification(String specialisation, String qualification) {
+        List<Specialiste> list = new ArrayList<>();
+        String sql = "SELECT * FROM Specialiste WHERE specialisation = ? AND qualification = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, specialisation);
+            stmt.setString(2, qualification);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Specialiste(
+                        rs.getInt("id_specialiste"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("specialisation"),
+                        rs.getString("qualification")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public boolean update(Specialiste specialiste) {
         String sql = "UPDATE Specialiste SET nom = ?, prenom = ?, specialisation = ?, qualification = ? WHERE id_specialiste = ?";
 
