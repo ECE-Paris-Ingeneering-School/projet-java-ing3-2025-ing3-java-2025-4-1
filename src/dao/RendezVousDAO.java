@@ -20,7 +20,7 @@ import java.util.Map;
 public class RendezVousDAO {
 
     public boolean create(RendezVous rdv) {
-        String sql = "INSERT INTO RendezVous (date_heure, id_patient, id_specialiste, id_lieu) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO RendezVous (date_heure, id_patient, id_specialiste, id_lieu, note) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,6 +29,7 @@ public class RendezVousDAO {
             stmt.setInt(2, rdv.getIdPatient());
             stmt.setInt(3, rdv.getIdSpecialiste());
             stmt.setInt(4, rdv.getIdLieu());
+            stmt.setInt(5, rdv.getNote());
 
             stmt.executeUpdate();
             return true;
@@ -54,7 +55,8 @@ public class RendezVousDAO {
                         rs.getTimestamp("date_heure").toLocalDateTime(),
                         rs.getInt("id_patient"),
                         rs.getInt("id_specialiste"),
-                        rs.getInt("id_lieu")
+                        rs.getInt("id_lieu"),
+                        rs.getInt("note")
                 );
             }
 
@@ -101,7 +103,8 @@ public class RendezVousDAO {
                         rs.getTimestamp("date_heure").toLocalDateTime(),
                         rs.getInt("id_patient"),
                         rs.getInt("id_specialiste"),
-                        rs.getInt("id_lieu")
+                        rs.getInt("id_lieu"),
+                        rs.getInt("note")
                 );
                 liste.add(rdv);
             }
@@ -114,7 +117,7 @@ public class RendezVousDAO {
     }
 
     public boolean update(RendezVous rdv) {
-        String sql = "UPDATE RendezVous SET date_heure = ?, id_patient = ?, id_specialiste = ?, id_lieu = ? WHERE id_rdv = ?";
+        String sql = "UPDATE RendezVous SET date_heure = ?, id_patient = ?, id_specialiste = ?, id_lieu = ?, note = ? WHERE id_rdv = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -123,7 +126,8 @@ public class RendezVousDAO {
             stmt.setInt(2, rdv.getIdPatient());
             stmt.setInt(3, rdv.getIdSpecialiste());
             stmt.setInt(4, rdv.getIdLieu());
-            stmt.setInt(5, rdv.getId());
+            stmt.setInt(5, rdv.getNote());
+            stmt.setInt(6, rdv.getId());
 
             return stmt.executeUpdate() > 0;
 
@@ -164,7 +168,8 @@ public class RendezVousDAO {
                         rs.getTimestamp("date_heure").toLocalDateTime(),
                         rs.getInt("id_patient"),
                         rs.getInt("id_specialiste"),
-                        rs.getInt("id_lieu")
+                        rs.getInt("id_lieu"),
+                        rs.getInt("note")
                 );
                 liste.add(rdv);
             }
@@ -270,4 +275,18 @@ public class RendezVousDAO {
 
         return result;
     }
+
+    public boolean updateNote(int idRdv, String note) {
+        String sql = "UPDATE rendez_vous SET note = ? WHERE id_rdv = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, note);
+            stmt.setInt(2, idRdv);
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
