@@ -1,80 +1,54 @@
 package Vue;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class HistoriqueView extends JFrame {
-    private JList<String> rdvList;
-    private JTextArea noteArea;
-    private JButton saveNoteButton, retourButton;
-    private DefaultListModel<String> listModel;
+    private JTable table;
+    private JButton noterButton;
+    private JButton retourButton;
 
     public HistoriqueView(String nom) {
-        setTitle("📝 Historique de mes RDV – " + nom);
-        setSize(600, 450);
-        setLocationRelativeTo(null);
+        setTitle("📝 Historique des RDV – " + nom);
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        listModel = new DefaultListModel<>();
-        rdvList = new JList<>(listModel);
-        rdvList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane listScroll = new JScrollPane(rdvList);
+        table = new JTable();
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(table);
 
-        noteArea = new JTextArea(4, 20);
-        JScrollPane noteScroll = new JScrollPane(noteArea);
-        noteArea.setLineWrap(true);
-        noteArea.setWrapStyleWord(true);
-
-        saveNoteButton = new JButton("💾 Sauvegarder la note");
+        noterButton = new JButton("⭐ Noter ce RDV");
         retourButton = new JButton("⬅️ Retour");
 
-        JPanel btns = new JPanel();
-        btns.add(saveNoteButton);
-        btns.add(retourButton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(noterButton);
+        buttonPanel.add(retourButton);
 
-        JPanel main = new JPanel();
-        main.setLayout(new BorderLayout(10, 10));
-        main.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        main.add(new JLabel("🕓 Rendez-vous passés :"), BorderLayout.NORTH);
-        main.add(listScroll, BorderLayout.CENTER);
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        mainPanel.add(new JLabel("📅 Liste des rendez-vous passés :"), BorderLayout.NORTH);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        JPanel south = new JPanel(new BorderLayout(5, 5));
-        south.add(new JLabel("🗒 Note / Commentaire :"), BorderLayout.NORTH);
-        south.add(noteScroll, BorderLayout.CENTER);
-        south.add(btns, BorderLayout.SOUTH);
-
-        main.add(south, BorderLayout.SOUTH);
-
-        add(main);
+        setContentPane(mainPanel);
     }
 
-    public void setRdvList(String[] items) {
-        listModel.clear();
-        for (String item : items) listModel.addElement(item);
+    public void setTableModel(DefaultTableModel model) {
+        table.setModel(model);
     }
 
-    public String getSelectedRdv() {
-        return rdvList.getSelectedValue();
+    public int getSelectedRow() {
+        return table.getSelectedRow();
     }
 
-    public void setNoteText(String note) {
-        noteArea.setText(note != null ? note : "");
-    }
-
-    public String getNoteText() {
-        return noteArea.getText().trim();
-    }
-
-    public void addSaveNoteListener(ActionListener listener) {
-        saveNoteButton.addActionListener(listener);
+    public void addNoterListener(ActionListener listener) {
+        noterButton.addActionListener(listener);
     }
 
     public void addRetourListener(ActionListener listener) {
         retourButton.addActionListener(listener);
-    }
-
-    public void addRdvSelectionListener(javax.swing.event.ListSelectionListener listener) {
-        rdvList.addListSelectionListener(listener);
     }
 }
