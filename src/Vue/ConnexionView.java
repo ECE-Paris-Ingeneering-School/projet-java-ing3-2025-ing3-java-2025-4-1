@@ -4,12 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+
+/**
+ * Vue de connexion permettant aux utilisateurs (patients ou administrateurs) de se connecter.
+ */
+
 public class ConnexionView extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton inscriptionButton;
     private JLabel statusLabel;
+
+
+    /**
+     * Constructeur de la fenêtre de connexion.
+     */
 
     public ConnexionView() {
         setTitle("Connexion");
@@ -73,13 +83,28 @@ public class ConnexionView extends JFrame {
         return panel;
     }
 
+    /**
+     * Récupère l'email saisi.
+     * @return l'email
+     */
+
     public String getEmail() {
         return emailField.getText();
     }
 
+    /**
+     * Récupère le mot de passe saisi.
+     * @return le mot de passe sous forme de chaîne
+     */
+
     public String getPassword() {
         return new String(passwordField.getPassword());
     }
+
+    /**
+     * Définit le message de statut affiché sous le formulaire.
+     * @param message message à afficher
+     */
 
     public void setStatus(String message) {
         statusLabel.setText(message);
