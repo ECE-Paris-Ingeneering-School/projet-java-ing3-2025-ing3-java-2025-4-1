@@ -6,66 +6,70 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class AdministrationFrame extends JFrame {
-    private JButton btnSpecialistes;
-    private JButton btnLieux;
-    private JButton btnRendezVous;
-    private JButton btnStats;
-    private JButton btnLogout;
-    private JButton btnAffectations;
-
+    private JButton specialistesButton;
+    private JButton lieuxButton;
+    private JButton rdvButton;
+    private JButton statsButton;
+    private JButton affectationsButton;
+    private JButton logoutButton;
+    private JLabel bienvenueLabel;
 
     public AdministrationFrame() {
         setTitle("Interface Administrateur");
-        setSize(400, 300);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        bienvenueLabel = new JLabel("Bienvenue Administrateur", SwingConstants.CENTER);
+        bienvenueLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        bienvenueLabel.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
 
-        btnSpecialistes = new JButton("Gérer les spécialistes");
-        btnLieux = new JButton("Gérer les lieux");
-        btnRendezVous = new JButton("Consulter les rendez-vous");
-        btnStats = new JButton("Voir les statistiques");
-        btnLogout = new JButton("Déconnexion");
-        btnAffectations = new JButton("Gérer les affectations");
+        specialistesButton = new JButton("Gérer les spécialistes");
+        lieuxButton = new JButton("Gérer les lieux");
+        rdvButton = new JButton("Consulter les rendez-vous");
+        statsButton = new JButton("Voir les statistiques");
+        affectationsButton = new JButton("Gérer les affectations");
+        logoutButton = new JButton("Déconnexion");
 
-        panel.add(btnSpecialistes);
-        panel.add(btnLieux);
-        panel.add(btnRendezVous);
-        panel.add(btnStats);
-        panel.add(btnAffectations);
-        panel.add(btnLogout);
+        JPanel gridPanel = new JPanel(new GridLayout(3, 2, 15, 15));
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 20, 30));
+        gridPanel.add(specialistesButton);
+        gridPanel.add(lieuxButton);
+        gridPanel.add(rdvButton);
+        gridPanel.add(statsButton);
+        gridPanel.add(affectationsButton);
+        gridPanel.add(logoutButton);
 
-        add(panel);
+        setLayout(new BorderLayout(10, 10));
+        add(bienvenueLabel, BorderLayout.NORTH);
+        add(gridPanel, BorderLayout.CENTER);
     }
 
-    public void addSpecialistesListener(ActionListener listener) {
-        btnSpecialistes.addActionListener(listener);
+    public void setNomPrenom(String nom, String prenom) {
+        bienvenueLabel.setText("Bienvenue " + prenom + " " + nom);
     }
 
-    public void addLieuxListener(ActionListener listener) {
-        btnLieux.addActionListener(listener);
+    public void addSpecialistesListener(ActionListener l) {
+        specialistesButton.addActionListener(l);
     }
 
-    public void addRendezVousListener(ActionListener listener) {
-        btnRendezVous.addActionListener(listener);
+    public void addLieuxListener(ActionListener l) {
+        lieuxButton.addActionListener(l);
     }
 
-    public void addStatsListener(ActionListener listener) {
-        btnStats.addActionListener(listener);
+    public void addRendezVousListener(ActionListener l) {
+        rdvButton.addActionListener(l);
     }
 
-    public void addLogoutListener(ActionListener listener) {
-        btnLogout.addActionListener(listener);
+    public void addStatsListener(ActionListener l) {
+        statsButton.addActionListener(l);
     }
 
-    public void addSpecialistesLieuListener(ActionListener listener) {
-        btnAffectations.addActionListener(listener);
+    public void addSpecialistesLieuListener(ActionListener l) {
+        affectationsButton.addActionListener(l);
     }
 
-
-
-
+    public void addLogoutListener(ActionListener l) {
+        logoutButton.addActionListener(l);
+    }
 }
