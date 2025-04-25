@@ -12,6 +12,8 @@ public class AdministrationController {
     public AdministrationController() {
         this.view = new AdministrationFrame();
 
+
+
         view.addSpecialistesListener(e -> {
             view.dispose();
             new GestionSpecialistesController();
