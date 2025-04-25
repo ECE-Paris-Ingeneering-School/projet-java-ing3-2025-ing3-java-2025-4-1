@@ -46,10 +46,8 @@ public class PriseRdvController {
         view.setSpecialisations(specialisations.toArray(new String[0]));
         view.setQualifications(qualifications.toArray(new String[0]));
 
-
         view.setLieuChangeListener(e -> updateSpecialistes());
         view.setSpecQualFilterListener(e -> updateSpecialistes());
-
         view.setDateChangeListener(e -> updateCreneaux());
         view.setSpecialisteChangeListener(e -> updateCreneaux());
 
@@ -105,10 +103,10 @@ public class PriseRdvController {
         int idLieu = Integer.parseInt(lText.substring(lText.indexOf("ID:") + 3, lText.indexOf(")")));
         List<Specialiste> specList = specialisteLieuDAO.findSpecialistesByLieu(idLieu);
 
-        if (spec != null && !spec.equals("") && !spec.equals("Toutes")) {
+        if (spec != null && !spec.equals("Toutes")) {
             specList = specList.stream().filter(s -> s.getSpecialisation().equals(spec)).collect(Collectors.toList());
         }
-        if (qual != null && !qual.equals("") && !qual.equals("Toutes")) {
+        if (qual != null && !qual.equals("Toutes")) {
             specList = specList.stream().filter(s -> s.getQualification().equals(qual)).collect(Collectors.toList());
         }
 
