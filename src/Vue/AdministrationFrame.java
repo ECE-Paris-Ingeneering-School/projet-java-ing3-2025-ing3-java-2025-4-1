@@ -5,6 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Interface graphique principale pour l'administrateur.
+ * Permet d'accéder aux différentes fonctionnalités de gestion : spécialistes, lieux, rendez-vous, statistiques et affectations.
+ */
 public class AdministrationFrame extends JFrame {
     private JButton specialistesButton;
     private JButton lieuxButton;
@@ -14,6 +18,9 @@ public class AdministrationFrame extends JFrame {
     private JButton logoutButton;
     private JLabel bienvenueLabel;
 
+    /**
+     * Constructeur de la fenêtre d'administration.
+     */
     public AdministrationFrame() {
         setTitle("Interface Administrateur");
         setSize(500, 400);
@@ -45,6 +52,11 @@ public class AdministrationFrame extends JFrame {
         add(gridPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Permet de changer dynamiquement le texte de bienvenue.
+     * @param nom Nom de l'administrateur
+     * @param prenom Prénom de l'administrateur
+     */
     public void setNomPrenom(String nom, String prenom) {
         bienvenueLabel.setText("Bienvenue " + prenom + " " + nom);
     }
