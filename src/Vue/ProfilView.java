@@ -11,7 +11,7 @@ public class ProfilView extends JFrame {
     private JLabel statusLabel;
 
     public ProfilView(String nom) {
-        setTitle("🧍‍♂️ Mon profil – " + nom);
+        setTitle("Mon profil – " + nom);
         setSize(450, 350);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,8 +31,8 @@ public class ProfilView extends JFrame {
         panel.add(labelWithField("Mot de passe :", passwordField));
         panel.add(Box.createVerticalStrut(15));
 
-        updateButton = new JButton("💾 Mettre à jour");
-        retourButton = new JButton("⬅️ Retour");
+        updateButton = new JButton("Mettre à jour");
+        retourButton = new JButton("Retour");
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         btnPanel.add(updateButton);
