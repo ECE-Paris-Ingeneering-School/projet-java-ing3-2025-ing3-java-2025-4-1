@@ -11,7 +11,7 @@ public class HistoriqueView extends JFrame {
     private JButton retourButton;
 
     public HistoriqueView(String nom) {
-        setTitle("📝 Historique des RDV – " + nom);
+        setTitle("Historique des RDV – " + nom);
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -20,8 +20,8 @@ public class HistoriqueView extends JFrame {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(table);
 
-        noterButton = new JButton("⭐ Noter ce RDV");
-        retourButton = new JButton("⬅️ Retour");
+        noterButton = new JButton("Noter ce RDV");
+        retourButton = new JButton("Retour");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(noterButton);
@@ -29,7 +29,7 @@ public class HistoriqueView extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        mainPanel.add(new JLabel("📅 Liste des rendez-vous passés :"), BorderLayout.NORTH);
+        mainPanel.add(new JLabel("Liste des rendez-vous passés :"), BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
