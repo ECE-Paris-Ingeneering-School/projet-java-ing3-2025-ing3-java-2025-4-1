@@ -17,10 +17,10 @@ public class PatientHomeView extends JFrame {
         panel.setLayout(new GridLayout(4, 1, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        rdvButton = new JButton("📅 Prendre un rendez-vous");
-        profilButton = new JButton("🧍‍♂️ Mon profil");
-        historiqueButton = new JButton("📝 Historique & Notes");
-        logoutButton = new JButton("🚪 Se déconnecter");
+        rdvButton = new JButton("Prendre un rendez-vous");
+        profilButton = new JButton("Mon profil");
+        historiqueButton = new JButton("Historique & Notes");
+        logoutButton = new JButton("Se déconnecter");
 
         panel.add(rdvButton);
         panel.add(profilButton);
