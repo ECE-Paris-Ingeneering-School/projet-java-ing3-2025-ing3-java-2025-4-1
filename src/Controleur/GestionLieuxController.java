@@ -1,4 +1,3 @@
-
 package Controleur;
 
 import Vue.GestionLieuxFrame;
@@ -9,16 +8,30 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
+/**
+ * Contrôleur responsable de la gestion des lieux dans l'interface d'administration.
+ * Permet à l'administrateur d'ajouter, modifier, supprimer et visualiser les lieux.
+ *
+ * Vue : {@link GestionLieuxFrame}
+ * DAO : {@link LieuDAO}
+ *
+ * Cette classe suit le pattern MVC pour assurer la séparation des responsabilités.
+ *
+ */
 public class GestionLieuxController {
     private GestionLieuxFrame view;
     private LieuDAO dao;
 
+    /**
+     * Initialise la vue de gestion des lieux et configure tous les listeners.
+     */
     public GestionLieuxController() {
         this.view = new GestionLieuxFrame();
         this.dao = new LieuDAO();
 
         loadLieux();
 
+        // Ajout d’un lieu
         view.addAjouterListener(e -> {
             String nom = view.getNom();
             String adresse = view.getAdresse();
@@ -40,6 +53,7 @@ public class GestionLieuxController {
             }
         });
 
+        // Modification d’un lieu
         view.addModifierListener(e -> {
             int id = view.getSelectedLieuId();
             if (id == -1) {
@@ -67,6 +81,7 @@ public class GestionLieuxController {
             }
         });
 
+        // Suppression d’un lieu
         view.addSupprimerListener(e -> {
             int id = view.getSelectedLieuId();
             if (id == -1) {
@@ -86,15 +101,18 @@ public class GestionLieuxController {
             }
         });
 
+        // Retour à l’accueil administrateur
         view.addRetourListener(e -> {
             view.dispose();
             new AdministrationController();
         });
 
-
         view.setVisible(true);
     }
 
+    /**
+     * Recharge les lieux depuis la base et les affiche dans la JTable.
+     */
     private void loadLieux() {
         List<Lieu> lieux = dao.findAll();
         String[] columns = {"ID", "Nom", "Adresse", "Ville", "Code postal"};

@@ -1,4 +1,3 @@
-
 package Controleur;
 
 import Vue.GestionSpecialistesFrame;
@@ -8,19 +7,31 @@ import Model.Specialiste;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
-import javax.swing.JOptionPane;
 
-
+/**
+ * Contrôleur de l'interface de gestion des spécialistes pour les administrateurs.
+ * Permet d’ajouter, modifier, supprimer et afficher les spécialistes en base de données.
+ *
+ * Vue : {@link GestionSpecialistesFrame}
+ * DAO : {@link SpecialisteDAO}
+ *
+ * Ce contrôleur respecte le modèle MVC et fournit une interaction fluide avec l’interface graphique.
+ *
+ */
 public class GestionSpecialistesController {
     private GestionSpecialistesFrame view;
     private SpecialisteDAO dao;
 
+    /**
+     * Initialise la vue de gestion des spécialistes et configure tous les listeners.
+     */
     public GestionSpecialistesController() {
         this.view = new GestionSpecialistesFrame();
         this.dao = new SpecialisteDAO();
 
         loadSpecialistes();
 
+        // Listener pour ajouter un spécialiste
         view.addAjouterListener(e -> {
             String nom = view.getNom();
             String prenom = view.getPrenom();
@@ -42,6 +53,7 @@ public class GestionSpecialistesController {
             }
         });
 
+        // Listener pour modifier un spécialiste
         view.addModifierListener(e -> {
             int id = view.getSelectedSpecialisteId();
             if (id == -1) {
@@ -69,6 +81,7 @@ public class GestionSpecialistesController {
             }
         });
 
+        // Listener pour supprimer un spécialiste
         view.addSupprimerListener(e -> {
             int id = view.getSelectedSpecialisteId();
             if (id == -1) {
@@ -88,16 +101,18 @@ public class GestionSpecialistesController {
             }
         });
 
+        // Bouton retour à l'administration
         view.addRetourListener(e -> {
             view.dispose();
             new AdministrationController();
         });
 
-
-
         view.setVisible(true);
     }
 
+    /**
+     * Charge la liste des spécialistes depuis la base et l'affiche dans la JTable.
+     */
     private void loadSpecialistes() {
         List<Specialiste> list = dao.findAll();
 

@@ -1,4 +1,3 @@
-
 package Vue;
 
 import javax.swing.*;
@@ -6,6 +5,19 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Vue graphique pour consulter, filtrer, modifier et supprimer les rendez-vous existants.
+ * Cette interface est destinée aux administrateurs pour gérer l'ensemble des rendez-vous.
+ *
+ * Fonctionnalités :
+ * - Filtrer par patient, spécialiste, lieu
+ * - Modifier la date/heure d'un rendez-vous
+ * - Supprimer un rendez-vous
+ * - Rafraîchir la liste
+ *
+ * Vue respectant l'architecture MVC (aucune logique métier ici).
+ *
+ */
 public class ConsultationRendezVousFrame extends JFrame {
     private JTable table;
     private JButton refreshButton;
@@ -18,6 +30,9 @@ public class ConsultationRendezVousFrame extends JFrame {
     private JComboBox<String> lieuFilter;
     private JTextField dateTimeField;
 
+    /**
+     * Construit la fenêtre de consultation des rendez-vous avec filtres et actions.
+     */
     public ConsultationRendezVousFrame() {
         setTitle("Consultation des rendez-vous");
         setSize(950, 650);
@@ -35,7 +50,6 @@ public class ConsultationRendezVousFrame extends JFrame {
         modifierButton = new JButton("Modifier");
         retourButton = new JButton("Retour");
 
-        // Panel haut : gauche (retour), droite (rafraîchir)
         JPanel topPanel = new JPanel(new BorderLayout());
 
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -47,7 +61,6 @@ public class ConsultationRendezVousFrame extends JFrame {
         topPanel.add(leftPanel, BorderLayout.WEST);
         topPanel.add(rightPanel, BorderLayout.EAST);
 
-        // Panel filtres et modification
         JPanel filterPanel = new JPanel(new GridLayout(3, 4, 10, 5));
         filterPanel.setBorder(BorderFactory.createTitledBorder("Filtres & Modification"));
         filterPanel.add(new JLabel("Patient :"));
@@ -70,6 +83,8 @@ public class ConsultationRendezVousFrame extends JFrame {
         add(filterPanel, BorderLayout.CENTER);
         add(scrollPane, BorderLayout.SOUTH);
     }
+
+    // Méthodes pour manipuler le tableau et les filtres
 
     public void setTableModel(DefaultTableModel model) {
         table.setModel(model);
@@ -114,6 +129,8 @@ public class ConsultationRendezVousFrame extends JFrame {
         }
         return null;
     }
+
+    // Ajout des listeners sur les boutons
 
     public void addRefreshListener(ActionListener listener) {
         refreshButton.addActionListener(listener);

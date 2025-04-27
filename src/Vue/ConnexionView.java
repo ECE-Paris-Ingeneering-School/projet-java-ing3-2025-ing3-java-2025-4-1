@@ -4,11 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
 /**
- * Vue de connexion permettant aux utilisateurs (patients ou administrateurs) de se connecter.
+ * Vue de l'écran de connexion pour les utilisateurs (patients ou administrateurs).
+ * Permet de se connecter ou d'accéder à la page d'inscription.
+ *
+ * Cette classe sépare bien l'interface graphique de la logique métier selon le pattern MVC.
+ * Elle fournit des méthodes pour récupérer les données saisies et ajouter des listeners aux boutons.
+ *
+ * Composants :
+ * - Champ email
+ * - Champ mot de passe
+ * - Bouton de connexion
+ * - Bouton d'inscription
+ * - Message d'erreur ou de statut
+ *
  */
-
 public class ConnexionView extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -16,11 +26,9 @@ public class ConnexionView extends JFrame {
     private JButton inscriptionButton;
     private JLabel statusLabel;
 
-
     /**
-     * Constructeur de la fenêtre de connexion.
+     * Initialise et construit l'interface de connexion.
      */
-
     public ConnexionView() {
         setTitle("Connexion");
         setSize(420, 360);
@@ -72,6 +80,13 @@ public class ConnexionView extends JFrame {
         add(mainPanel);
     }
 
+    /**
+     * Crée un panel pour un champ de formulaire avec son label associé.
+     *
+     * @param labelText Le texte du label.
+     * @param field Le champ de saisie.
+     * @return Le panel contenant le label et le champ.
+     */
     private JPanel labelWithField(String labelText, JComponent field) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBackground(Color.WHITE);
@@ -84,36 +99,46 @@ public class ConnexionView extends JFrame {
     }
 
     /**
-     * Récupère l'email saisi.
-     * @return l'email
+     * Retourne l'email saisi par l'utilisateur.
+     *
+     * @return L'email.
      */
-
     public String getEmail() {
         return emailField.getText();
     }
 
     /**
-     * Récupère le mot de passe saisi.
-     * @return le mot de passe sous forme de chaîne
+     * Retourne le mot de passe saisi par l'utilisateur.
+     *
+     * @return Le mot de passe.
      */
-
     public String getPassword() {
         return new String(passwordField.getPassword());
     }
 
     /**
-     * Définit le message de statut affiché sous le formulaire.
-     * @param message message à afficher
+     * Définit un message de statut ou d'erreur en bas de la vue.
+     *
+     * @param message Le message à afficher.
      */
-
     public void setStatus(String message) {
         statusLabel.setText(message);
     }
 
+    /**
+     * Ajoute un listener pour le bouton "Se connecter".
+     *
+     * @param listener Le listener.
+     */
     public void addLoginListener(ActionListener listener) {
         loginButton.addActionListener(listener);
     }
 
+    /**
+     * Ajoute un listener pour le bouton "Créer un compte".
+     *
+     * @param listener Le listener.
+     */
     public void addInscriptionListener(ActionListener listener) {
         inscriptionButton.addActionListener(listener);
     }

@@ -1,5 +1,11 @@
 package Model;
 
+/**
+ * Représente un patient de l'application.
+ * Chaque patient possède un identifiant, des informations personnelles
+ * et un type (nouveau ou ancien).
+ *
+ */
 public class Patient {
     private int id;
     private String nom;
@@ -8,6 +14,16 @@ public class Patient {
     private String motDePasse;
     private String typePatient;
 
+    /**
+     * Constructeur complet avec identifiant.
+     *
+     * @param id Identifiant du patient.
+     * @param nom Nom de famille.
+     * @param prenom Prénom.
+     * @param email Adresse email.
+     * @param motDePasse Mot de passe.
+     * @param typePatient Type de patient (nouveau ou ancien).
+     */
     public Patient(int id, String nom, String prenom, String email, String motDePasse, String typePatient) {
         this.id = id;
         this.nom = nom;
@@ -17,50 +33,49 @@ public class Patient {
         this.typePatient = typePatient;
     }
 
+    /**
+     * Constructeur sans identifiant (utilisé avant insertion en BDD).
+     *
+     * @param nom Nom de famille.
+     * @param prenom Prénom.
+     * @param email Adresse email.
+     * @param motDePasse Mot de passe.
+     * @param typePatient Type de patient (nouveau ou ancien).
+     */
     public Patient(String nom, String prenom, String email, String motDePasse, String typePatient) {
         this(0, nom, prenom, email, motDePasse, typePatient);
     }
 
-    public int getId() {
-        return id;
-    }
+    /** @return l'identifiant du patient. */
+    public int getId() { return id; }
 
-    public String getEmail() {
-        return email;
-    }
+    /** @return l'adresse email du patient. */
+    public String getEmail() { return email; }
 
-    public String getNom() {
-        return nom;
-    }
+    /** @return le nom du patient. */
+    public String getNom() { return nom; }
 
-    public String getPrenom() {
-        return prenom;
-    }
+    /** @return le prénom du patient. */
+    public String getPrenom() { return prenom; }
 
-    public String getTypePatient() {
-        return typePatient;
-    }
+    /** @return le type de patient (nouveau / ancien). */
+    public String getTypePatient() { return typePatient; }
 
-    public String getMotDePasse() {
-        return motDePasse;
-    }
+    /** @return le mot de passe du patient. */
+    public String getMotDePasse() { return motDePasse; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setTypePatient(String typePatient) {
-        this.typePatient = typePatient;
-    }
+    /** @param nom le nouveau nom à définir. */
+    public void setNom(String nom) { this.nom = nom; }
+
+    /** @param prenom le nouveau prénom à définir. */
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    /** @param email la nouvelle adresse email. */
+    public void setEmail(String email) { this.email = email; }
+
+    /** @param motDePasse le nouveau mot de passe. */
+    public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
+
+    /** @param id l'identifiant à définir (utile pour set après insertion). */
+    public void setId(int id) { this.id = id; }
 }

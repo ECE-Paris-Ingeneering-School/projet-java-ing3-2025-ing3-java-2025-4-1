@@ -4,6 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Vue graphique pour permettre aux patients de prendre un rendez-vous.
+ *
+ * Fonctionnalités principales :
+ * - Sélection du lieu, spécialisation, qualification, spécialiste
+ * - Sélection de la date et du créneau horaire disponible
+ * - Validation de la prise de rendez-vous
+ * - Retour vers l'accueil
+ *
+ * Cette classe suit le modèle MVC : elle expose uniquement des méthodes
+ * pour récupérer les choix utilisateurs et ajouter des listeners.
+ *
+ * Composants : JComboBox, JLabel, JButton
+ *
+ */
 public class PriseRdvView extends JFrame {
     private JComboBox<String> specialisteCombo, lieuCombo;
     private JComboBox<String> specialisationCombo, qualificationCombo;
@@ -12,6 +27,11 @@ public class PriseRdvView extends JFrame {
     private JButton validerButton, retourButton;
     private JLabel statusLabel;
 
+    /**
+     * Construit la fenêtre de prise de rendez-vous pour un patient.
+     *
+     * @param nomPatient Prénom du patient pour affichage dans le titre.
+     */
     public PriseRdvView(String nomPatient) {
         setTitle("Prendre un rendez-vous – " + nomPatient);
         setSize(700, 500);
@@ -69,6 +89,13 @@ public class PriseRdvView extends JFrame {
         add(panel);
     }
 
+    /**
+     * Crée un petit panel horizontal avec un label et un champ.
+     *
+     * @param label Le texte du label.
+     * @param field Le champ associé.
+     * @return Le JPanel combiné.
+     */
     private JPanel labelWithField(String label, JComponent field) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -77,101 +104,63 @@ public class PriseRdvView extends JFrame {
         return panel;
     }
 
+    // Méthodes pour setter les listes déroulantes
     public void setSpecialistes(String[] items) {
         specialisteCombo.setModel(new DefaultComboBoxModel<>(items));
     }
-
     public void setLieux(String[] items) {
         lieuCombo.setModel(new DefaultComboBoxModel<>(items));
     }
-
     public void setSpecialisations(String[] items) {
         specialisationCombo.setModel(new DefaultComboBoxModel<>(items));
     }
-
     public void setQualifications(String[] items) {
         qualificationCombo.setModel(new DefaultComboBoxModel<>(items));
     }
-
     public void setCreneaux(String[] items) {
         creneauxCombo.setModel(new DefaultComboBoxModel<>(items));
     }
 
-    public String getSelectedSpecialiste() {
-        return (String) specialisteCombo.getSelectedItem();
-    }
 
-    public String getSelectedLieu() {
-        return (String) lieuCombo.getSelectedItem();
-    }
+    // Méthodes pour récupérer les sélections de l'utilisateur
+    public String getSelectedSpecialiste() { return (String) specialisteCombo.getSelectedItem(); }
+    public String getSelectedLieu() { return (String) lieuCombo.getSelectedItem(); }
+    public String getSelectedSpecialisation() { return (String) specialisationCombo.getSelectedItem(); }
+    public String getSelectedQualification() { return (String) qualificationCombo.getSelectedItem(); }
+    public String getSelectedCreneau() { return (String) creneauxCombo.getSelectedItem(); }
+    public String getSelectedJour() { return (String) jourCombo.getSelectedItem(); }
+    public String getSelectedMois() { return (String) moisCombo.getSelectedItem(); }
+    public String getSelectedAnnee() { return (String) anneeCombo.getSelectedItem(); }
 
-    public String getSelectedSpecialisation() {
-        return (String) specialisationCombo.getSelectedItem();
-    }
-
-    public String getSelectedQualification() {
-        return (String) qualificationCombo.getSelectedItem();
-    }
-
-    public String getSelectedDate() {
-        String jour = (String) jourCombo.getSelectedItem();
-        String mois = ((String) moisCombo.getSelectedItem()).substring(0, 2);
-        String annee = (String) anneeCombo.getSelectedItem();
-        return annee + "-" + mois + "-" + jour;
-    }
-
-    public String getSelectedCreneau() {
-        return (String) creneauxCombo.getSelectedItem();
-    }
-
+    /**
+     * Affiche un message de statut (succès ou erreur).
+     *
+     * @param message Le message à afficher.
+     */
     public void setStatus(String message) {
         statusLabel.setText(message);
     }
 
+    // Méthodes pour ajouter des listeners aux éléments de l'interface
     public void setLieuChangeListener(ActionListener listener) {
         lieuCombo.addActionListener(listener);
     }
-
-    public void setSpecialisationChangeListener(ActionListener listener) {
-        specialisationCombo.addActionListener(listener);
-    }
-
-    public void setQualificationChangeListener(ActionListener listener) {
-        qualificationCombo.addActionListener(listener);
-    }
-
     public void setDateChangeListener(ActionListener listener) {
         jourCombo.addActionListener(listener);
         moisCombo.addActionListener(listener);
         anneeCombo.addActionListener(listener);
     }
-
     public void setSpecialisteChangeListener(ActionListener listener) {
         specialisteCombo.addActionListener(listener);
     }
-
-    public void addValiderListener(ActionListener listener) {
-        validerButton.addActionListener(listener);
-    }
-
-    public void addRetourListener(ActionListener listener) {
-        retourButton.addActionListener(listener);
-    }
-
     public void setSpecQualFilterListener(ActionListener listener) {
         specialisationCombo.addActionListener(listener);
         qualificationCombo.addActionListener(listener);
     }
-
-    public String getSelectedJour() {
-        return (String) jourCombo.getSelectedItem();
+    public void addValiderListener(ActionListener listener) {
+        validerButton.addActionListener(listener);
     }
-
-    public String getSelectedMois() {
-        return (String) moisCombo.getSelectedItem();
-    }
-
-    public String getSelectedAnnee() {
-        return (String) anneeCombo.getSelectedItem();
+    public void addRetourListener(ActionListener listener) {
+        retourButton.addActionListener(listener);
     }
 }

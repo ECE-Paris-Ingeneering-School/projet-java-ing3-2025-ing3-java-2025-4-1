@@ -1,4 +1,3 @@
-
 package Vue;
 
 import javax.swing.*;
@@ -6,6 +5,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Vue graphique pour la gestion des spécialistes (ajouter, modifier, supprimer).
+ * Cette interface est destinée aux administrateurs pour gérer les médecins et praticiens disponibles.
+ *
+ * Fonctionnalités principales :
+ * - Affichage de la liste des spécialistes existants
+ * - Ajout d'un nouveau spécialiste
+ * - Modification des informations d'un spécialiste
+ * - Suppression d'un spécialiste
+ *
+ * Cette classe respecte le modèle MVC en séparant strictement l'affichage de la logique métier.
+ *
+ * Composants : JTable, JTextFields, JButtons
+ *
+ */
 public class GestionSpecialistesFrame extends JFrame {
     private JTable table;
     private JTextField nomField;
@@ -17,6 +31,9 @@ public class GestionSpecialistesFrame extends JFrame {
     private JButton supprimerButton;
     private JButton retourButton;
 
+    /**
+     * Construit la fenêtre d'administration pour la gestion des spécialistes.
+     */
     public GestionSpecialistesFrame() {
         setTitle("Gestion des spécialistes");
         setSize(700, 550);
@@ -54,18 +71,26 @@ public class GestionSpecialistesFrame extends JFrame {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(retourButton);
 
-
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
         add(formPanel, BorderLayout.SOUTH);
-
     }
 
+    /**
+     * Met à jour le modèle de la JTable affichant les spécialistes.
+     *
+     * @param model Le modèle de données à afficher.
+     */
     public void setTableModel(DefaultTableModel model) {
         table.setModel(model);
     }
 
+    /**
+     * Retourne l'identifiant du spécialiste sélectionné.
+     *
+     * @return L'identifiant ou -1 si aucune sélection.
+     */
     public int getSelectedSpecialisteId() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
@@ -74,27 +99,59 @@ public class GestionSpecialistesFrame extends JFrame {
         return -1;
     }
 
+    /** @return Le nom saisi. */
     public String getNom() { return nomField.getText(); }
+
+    /** @return Le prénom saisi. */
     public String getPrenom() { return prenomField.getText(); }
+
+    /** @return La spécialisation saisie. */
     public String getSpecialisation() { return specialisationField.getText(); }
+
+    /** @return La qualification saisie. */
     public String getQualification() { return qualificationField.getText(); }
 
+    // Méthodes pour lier les actions aux boutons
+
+    /**
+     * Ajoute un listener au bouton "Ajouter".
+     *
+     * @param listener Le listener à associer.
+     */
     public void addAjouterListener(ActionListener listener) {
         ajouterButton.addActionListener(listener);
     }
 
+    /**
+     * Ajoute un listener au bouton "Modifier".
+     *
+     * @param listener Le listener à associer.
+     */
     public void addModifierListener(ActionListener listener) {
         modifierButton.addActionListener(listener);
     }
 
+    /**
+     * Ajoute un listener au bouton "Supprimer".
+     *
+     * @param listener Le listener à associer.
+     */
     public void addSupprimerListener(ActionListener listener) {
         supprimerButton.addActionListener(listener);
     }
 
+    /**
+     * Ajoute un listener au bouton "Retour".
+     *
+     * @param listener Le listener à associer.
+     */
     public void addRetourListener(ActionListener listener) {
         retourButton.addActionListener(listener);
     }
 
+    /**
+     * Vide tous les champs du formulaire.
+     */
     public void clearFields() {
         nomField.setText("");
         prenomField.setText("");

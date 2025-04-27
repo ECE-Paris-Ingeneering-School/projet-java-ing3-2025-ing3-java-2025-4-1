@@ -4,12 +4,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Vue graphique pour consulter et modifier le profil d'un patient connecté.
+ * Permet de mettre à jour :
+ * - Nom
+ * - Prénom
+ * - Email
+ * - Mot de passe
+ *
+ * Fonctionnalités principales :
+ * - Mise à jour du profil
+ * - Retour vers l'accueil patient
+ *
+ * Cette classe suit le modèle MVC : elle expose uniquement des getters/setters et des listeners d'action.
+ *
+ * Composants : JTextFields, JPasswordField, JButtons
+ *
+ */
 public class ProfilView extends JFrame {
     private JTextField nomField, prenomField, emailField;
     private JPasswordField passwordField;
     private JButton updateButton, retourButton;
     private JLabel statusLabel;
 
+    /**
+     * Construit la fenêtre de profil pour un patient donné.
+     *
+     * @param nom Le prénom du patient affiché dans le titre.
+     */
     public ProfilView(String nom) {
         setTitle("Mon profil – " + nom);
         setSize(450, 350);
@@ -47,6 +69,13 @@ public class ProfilView extends JFrame {
         add(panel);
     }
 
+    /**
+     * Crée un panel contenant un label et un champ de formulaire alignés horizontalement.
+     *
+     * @param label Le texte du label.
+     * @param field Le champ de saisie associé.
+     * @return Le panel combiné.
+     */
     private JPanel labelWithField(String label, JComponent field) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -57,24 +86,43 @@ public class ProfilView extends JFrame {
         return panel;
     }
 
+    // Méthodes pour mettre à jour les champs
     public void setNom(String nom) { nomField.setText(nom); }
     public void setPrenom(String prenom) { prenomField.setText(prenom); }
     public void setEmail(String email) { emailField.setText(email); }
     public void setPassword(String mdp) { passwordField.setText(mdp); }
 
+    // Méthodes pour récupérer les valeurs saisies
     public String getNom() { return nomField.getText(); }
     public String getPrenom() { return prenomField.getText(); }
     public String getEmail() { return emailField.getText(); }
     public String getPassword() { return new String(passwordField.getPassword()); }
 
+    // Méthodes pour ajouter des listeners sur les boutons
+
+    /**
+     * Ajoute un listener pour le bouton de mise à jour du profil.
+     *
+     * @param listener Le listener à associer.
+     */
     public void addUpdateListener(ActionListener listener) {
         updateButton.addActionListener(listener);
     }
 
+    /**
+     * Ajoute un listener pour le bouton de retour vers l'accueil.
+     *
+     * @param listener Le listener à associer.
+     */
     public void addRetourListener(ActionListener listener) {
         retourButton.addActionListener(listener);
     }
 
+    /**
+     * Définit un message de statut (erreur ou confirmation).
+     *
+     * @param msg Le message à afficher.
+     */
     public void setStatus(String msg) {
         statusLabel.setText(msg);
     }

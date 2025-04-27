@@ -14,6 +14,15 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur responsable de la prise de rendez-vous pour un patient.
+ * Permet de filtrer par lieu, spécialisation, qualification, de sélectionner un créneau disponible
+ * et de réserver un rendez-vous via l'interface {@link PriseRdvView}.
+ *
+ * DAO utilisés : {@link LieuDAO}, {@link SpecialisteDAO}, {@link SpecialisteLieuDAO}, {@link RendezVousDAO}
+ * Modèle concerné : {@link RendezVous}, {@link Patient}, {@link Specialiste}, {@link Lieu}
+ *
+ */
 public class PriseRdvController {
     private PriseRdvView view;
     private Patient patient;
@@ -22,6 +31,11 @@ public class PriseRdvController {
     private SpecialisteLieuDAO specialisteLieuDAO;
     private RendezVousDAO rendezVousDAO;
 
+    /**
+     * Initialise la vue de prise de rendez-vous, configure les filtres et listeners.
+     *
+     * @param patient Le patient actuellement connecté.
+     */
     public PriseRdvController(Patient patient) {
         this.patient = patient;
         this.view = new PriseRdvView(patient.getPrenom());
@@ -31,6 +45,7 @@ public class PriseRdvController {
         this.specialisteLieuDAO = new SpecialisteLieuDAO();
         this.rendezVousDAO = new RendezVousDAO();
 
+        // Chargement initial des lieux et filtres
         List<Lieu> lieux = lieuDAO.findAll();
         view.setLieux(lieux.stream()
                 .map(l -> l.getNomEtablissement() + " - " + l.getVille() + " (ID:" + l.getId() + ")")
@@ -46,11 +61,13 @@ public class PriseRdvController {
         view.setSpecialisations(specialisations.toArray(new String[0]));
         view.setQualifications(qualifications.toArray(new String[0]));
 
+        // Événements UI
         view.setLieuChangeListener(e -> updateSpecialistes());
         view.setSpecQualFilterListener(e -> updateSpecialistes());
         view.setDateChangeListener(e -> updateCreneaux());
         view.setSpecialisteChangeListener(e -> updateCreneaux());
 
+        // Validation de prise de rendez-vous
         view.addValiderListener(e -> {
             String sText = view.getSelectedSpecialiste();
             String lText = view.getSelectedLieu();
@@ -93,6 +110,9 @@ public class PriseRdvController {
         view.setVisible(true);
     }
 
+    /**
+     * Met à jour dynamiquement les spécialistes selon le lieu, la spécialisation et la qualification.
+     */
     private void updateSpecialistes() {
         String lText = view.getSelectedLieu();
         String spec = view.getSelectedSpecialisation();
@@ -119,6 +139,9 @@ public class PriseRdvController {
         }
     }
 
+    /**
+     * Met à jour les créneaux disponibles en fonction des filtres et de la date sélectionnée.
+     */
     private void updateCreneaux() {
         String sText = view.getSelectedSpecialiste();
         String lText = view.getSelectedLieu();
